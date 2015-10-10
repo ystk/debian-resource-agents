@@ -1,0 +1,56 @@
+From 68fad38326b7c04efd6434e736e32fe395eafe02 Mon Sep 17 00:00:00 2001
+From: Matthew Newton <mcn4@leicester.ac.uk>
+Date: Fri, 11 Oct 2013 10:43:40 +0100
+Subject: [PATCH] Disable HTTPS SSL certificate hostname checking, tidy debug
+ output
+
+HTTPS checks with request/receive will fail under newer versions of the
+LWP module due to certificate name checking being enabled by default. This
+disables the check again so that service checking by IP only still succeeds.
+
+Additional debug output shows the Status line so that it is easier to find out
+why the service is down. Debug output tidied up when SSL values are not set
+(usually if there has been an error, or the host is unreachable).
+---
+ ldirectord/ldirectord.in | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/ldirectord/ldirectord.in b/ldirectord/ldirectord.in
+index 45a4204..6a46d97 100644
+--- a/ldirectord/ldirectord.in
++++ b/ldirectord/ldirectord.in
+@@ -2835,7 +2835,7 @@ sub check_http
+ 	&ld_debug(2, "check_http: url=\"$$r{url}\" "
+ 		. "virtualhost=\"$virtualhost\"");
+ 
+-	my $ua = new LWP::UserAgent();
++	my $ua = new LWP::UserAgent(ssl_opts => { verify_hostname => 0 });
+ 
+ 	my $h = undef;
+ 	if ($$v{service} eq "http_proxy") {
+@@ -2876,14 +2876,16 @@ sub check_http
+ 	}
+ 
+ 	if ($$v{service} eq "https") {
+-		&ld_debug(2, "SSL-Cipher: " .
+-			$res->header('Client-SSL-Cipher'));
+-		&ld_debug(2, "SSL-Cert-Subject: " .
+-			$res->header('Client-SSL-Cert-Subject'));
+-		&ld_debug(2, "SSL-Cert-Issuer: " .
+-			$res->header('Client-SSL-Cert-Issuer'));
++                &ld_debug(2, "SSL-Cipher: " .
++                        ($res->header('Client-SSL-Cipher') || '<not set>'));
++                &ld_debug(2, "SSL-Cert-Subject: " .
++                        ($res->header('Client-SSL-Cert-Subject') || '<not set>'));
++                &ld_debug(2, "SSL-Cert-Issuer: " .
++                        ($res->header('Client-SSL-Cert-Issuer') || '<not set>'));
+ 	}
+ 
++	&ld_debug(2, "Return status: " . $res->status_line);
++
+ 	my $recstr = $$r{receive};
+ 	if ($res->is_success && (!($recstr =~ /.+/) ||
+ 				$res->content =~ /$recstr/)) {
+-- 
+1.9.0
+

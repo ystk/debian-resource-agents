@@ -1,0 +1,6 @@
+01_docbook_patch.patch
+02_spelling_fixes.patch
+mysql-path.patch
+fix-gethostinfo-v2.patch
+724116-fix-FTBFS.patch
+0001-Disable-HTTPS-SSL-certificate-hostname-checking-tidy.patch
