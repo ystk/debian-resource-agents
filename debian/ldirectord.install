@@ -1,0 +1,6 @@
+etc/ha.d/resource.d/ldirectord
+etc/init.d/ldirectord
+etc/logrotate.d/ldirectord
+usr/sbin/ldirectord
+usr/share/man/man8/ldirectord.8
+lib/systemd/system/
