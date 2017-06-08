@@ -7,7 +7,7 @@
 #
 #
 # Author:	Alan Robertson
-# Support:	linux-ha@lists.linux-ha.org
+# Support:	users@clusterlabs.org
 # License:	GNU General Public License (GPL)
 # Copyright:	(C) 2002 - 2005 International Business Machines, Inc.
 #
@@ -386,7 +386,7 @@ get_activate_options()
 ##
 retry_exclusive_start()
 {
-	local vgchange_options=$(get_activate_options)
+	local vgchange_options="$(get_activate_options)"
 
 	# Deactivate each LV in the group one by one cluster wide
 	set -- $(lvs -o name,attr --noheadings $OCF_RESKEY_volgrpname 2> /dev/null)
@@ -412,7 +412,7 @@ retry_exclusive_start()
 #	Enable LVM volume
 #
 LVM_start() {
-	local vgchange_options=$(get_activate_options)
+	local vgchange_options="$(get_activate_options)"
 	local vg=$1
 	local clvmd=0
 
@@ -548,7 +548,7 @@ LVM_validate_all() {
 		# "unknown device" then another node may have marked a device missing 
 		# where we have access to all of them and can start without issue. 
 		if vgs -o pv_attr --noheadings $OCF_RESKEY_volgrpname 2>/dev/null | grep 'm' > /dev/null 2>&1; then
-			if vgs -o pv_name --noheadings $OCF_RESKEY_volgrpname 2>/dev/null | grep 'unknown device' > /dev/null 2>&1; then
+			if vgs -o pv_name --noheadings $OCF_RESKEY_volgrpname 2>/dev/null | grep -E "unknown device|Couldn't find device|Device mismatch detected" > /dev/null 2>&1; then
 				if ! ocf_is_true "$OCF_RESKEY_partial_activation" ; then
 					# We are missing devices and cannot activate partially
 					ocf_exit_reason "Volume group [$VOLUME] has devices missing.  Consider partial_activation=true to attempt to activate partially"

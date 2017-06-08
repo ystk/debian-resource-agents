@@ -2,17 +2,15 @@ Source: resource-agents
 Section: admin
 Priority: optional
 Maintainer: Debian HA Maintainers <debian-ha-maintainers@lists.alioth.debian.org>
-Uploaders: Martin Loschwitz <madkiss@debian.org>,
-           Anibal Monsalve Salazar <anibal@debian.org>,
-           Simon Horman <horms@debian.org>,
-           Frederik Schüler <fs@debian.org>,
-           Christoph Berg <myon@debian.org>,
-           Adrian Vondendriesch <adrian.vondendriesch@credativ.de>
+Uploaders: Christoph Berg <myon@debian.org>,
+           Adrian Vondendriesch <adrian.vondendriesch@credativ.de>,
+           Valentin Vidic <Valentin.Vidic@CARNet.hr>
 Build-Depends: autoconf,
                automake,
                autotools-dev,
                cluster-glue-dev,
                debhelper (>= 9),
+               dh-exec,
                dh-systemd,
                docbook-xml,
                docbook-xsl,
@@ -24,31 +22,39 @@ Build-Depends: autoconf,
                libplumbgpl2-dev (>= 1.0.12~),
                libstonith1-dev (>= 1.0.12~),
                libtool,
+               libxml2-utils,
+               net-tools,
                pkg-config,
                python,
 #              for systemd.pc:
-               systemd,
-               xsltproc
-Standards-Version: 3.9.6
+               systemd [linux-any],
+               xsltproc,
+               xml-twig-tools,
+Standards-Version: 3.9.8
 Homepage: https://github.com/ClusterLabs/resource-agents
 Vcs-Browser: https://anonscm.debian.org/cgit/debian-ha/resource-agents.git/
 Vcs-Git: git://anonscm.debian.org/debian-ha/resource-agents.git
 
 Package: resource-agents
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, cluster-glue, python
+Depends: ${misc:Depends}, ${shlibs:Depends}, cluster-glue, gawk, python
+Recommends: net-tools
 Replaces: cluster-agents (<= 1:1.0.4-1), rgmanager (<= 3.0.12-2+b1), resource-agents-dev (<< 1:3.9.6)
 Conflicts: cluster-agents (<= 1:1.0.4-1), rgmanager (<= 3.0.12-2+b1), resource-agents-dev (<< 1:3.9.6)
 Provides: resource-agents-dev
 Description: Cluster Resource Agents
- The Cluster Resource Agents are a set of scripts to interface with
- several services to operate in a High Availability environment
- for both Pacemaker and rgmanager resource managers.
+ This package contains cluster resource agents (RAs) compliant with the Open
+ Cluster Framework (OCF) specification, used to interface with various services
+ in a High Availability environment managed by the Pacemaker resource manager.
+ .
+ Agents included:
+ ${agents}
 
 Package: ldirectord
 Priority: extra
 Architecture: all
 Depends: ipvsadm,
+         lsb-base,
          libauthen-radius-perl,
          libcrypt-ssleay-perl,
          libdbi-perl,

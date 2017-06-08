@@ -2,4 +2,7 @@
 02_spelling_fixes.patch
 mysql-path.patch
 no-dirty-version
-runocft
+ipv6-linux-only
+850787-fix-typo
+ocft-configs.patch
+pgsql-9.6

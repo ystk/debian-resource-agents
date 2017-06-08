@@ -1,0 +1,47 @@
+commit 6e91193f0e4d3f72d22564e1fe393e7391691f9d
+Author: Andreas Ntaflos <andreas.ntaflos@rise-world.com>
+Date:   Mon Dec 12 14:43:59 2016 +0100
+
+    Double-quote value of synchronous_standby_names in rep_mode.conf
+    
+    PostgreSQL 9.6 introduced a new syntax for specifying
+    synchronous_standby_names. The old syntax, used by the pgsql RA, is
+    still valid but PostgreSQL now treats the standby-names in
+    synchronous_standby_names as SQL identifiers. This means such values
+    need to be double-quoted since they can easily contain dashes or other
+    characters that are not valid in a bare SQL identifier.
+    
+    See the docs for synchronous_standby_names in
+    https://www.postgresql.org/docs/9.6/static/runtime-config-replication.html
+    for confirmation and
+    https://www.postgresql.org/message-id/21183.1481253534%40sss.pgh.pa.us
+    for a short discussion.
+
+commit 6ad25cf64e00cebe5d90ec96430d94a38b240d31
+Author: Gianluca De Cicco <gnlcdccc@gmail.com>
+Date:   Thu Mar 23 15:12:24 2017 +0100
+
+    fix regex in set async mode
+
+Index: resource-agents/heartbeat/pgsql
+===================================================================
+--- resource-agents.orig/heartbeat/pgsql
++++ resource-agents/heartbeat/pgsql
+@@ -1474,7 +1474,7 @@ set_async_mode_all() {
+ }
+ 
+ set_async_mode() {
+-    cat $REP_MODE_CONF |  grep -q -e "[,' ]$1[,' ]"
++    cat $REP_MODE_CONF |  grep -q -E "(\"$1\")|([,' ]$1[,' ])"
+     if [ $? -eq 0 ]; then
+         ocf_log info "Setup $1 into async mode."
+         runasowner -q err "echo \"synchronous_standby_names = ''\" > \"$REP_MODE_CONF\""
+@@ -1493,7 +1493,7 @@ set_sync_mode() {
+         ocf_log debug "$sync_node_in_conf is already sync mode."
+     else
+         ocf_log info "Setup $1 into sync mode."
+-        runasowner -q err "echo \"synchronous_standby_names = '$1'\" > \"$REP_MODE_CONF\""
++        runasowner -q err "echo \"synchronous_standby_names = '\\\"$1\\\"'\" > \"$REP_MODE_CONF\""
+         [ "$RE_CONTROL_SLAVE" = "false" ] && RE_CONTROL_SLAVE="true"
+         exec_with_retry 0 reload_conf
+     fi

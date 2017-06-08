@@ -1,3 +1,76 @@
+resource-agents (1:4.0.0~rc1-4~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 07 Jun 2017 10:10:14 +0200
+
+resource-agents (1:4.0.0~rc1-4) unstable; urgency=medium
+
+  * pgsql: postgresql-9.6 treats the contents of synchronous_standby_names as
+    SQL identifiers, they need to be quoted for dashes etc. (Closes: #862719)
+
+ -- Christoph Berg <myon@debian.org>  Sun, 04 Jun 2017 09:30:30 +0200
+
+resource-agents (1:4.0.0~rc1-3) unstable; urgency=medium
+
+  * debian/control: add net-tools to Recommends (Closes: #857368)
+
+ -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Tue, 14 Mar 2017 08:36:06 +0100
+
+resource-agents (1:4.0.0~rc1-2) unstable; urgency=medium
+
+  * resource-agents: depend on gawk for LVM monitor
+  * debian/control: replace tab with spaces
+  * debian/tests: use ocft to test resource-agents
+  * lintian: ignore defunct RHEL script rhev-check.sh
+  * debian/watch: fix RC handling in upstream version
+  * debian/tests: check ldirectord service startup
+  * debian/tests: use ocft to test nfsserver agent
+  * debian/tests: simplify nfsserver tests
+  * Add Valentin Vidic to Uploaders.
+
+ -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Mon, 23 Jan 2017 11:07:20 +0100
+
+resource-agents (1:4.0.0~rc1-1) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Christoph Berg ]
+  * New upstream RC version.
+  * Add libxml2-utils to Build-Depends for xmllint.
+  * Include list of agents in package description.
+  * Remove unused CVE-2010-3389--bug598549.patch.
+  * Fix typo in IPaddr2, patch by ISHIKAWA Mutsumi. (Closes: #850787)
+
+  [ Adrian Vondendriesch ]
+  * Bump standards version.
+  * Add lsb-base to ldirectord dependencies.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 11 Jan 2017 11:18:39 +0100
+
+resource-agents (1:3.9.7-3) unstable; urgency=medium
+
+  * Hardwire SHELL in /usr/lib/ocf/lib/heartbeat/ocf-binaries to /bin/bash,
+    too many scripts contain bashisms. Spotted by the reproducible project,
+    thanks!
+  * Disable IPv6addr and send_ua on non-Linux, they need SIOCSIFADDR and
+    SIOGIFINDEX.
+  * Use dh-exec to install ldirectord.service and sfex* on Linux only.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 08 Apr 2016 21:19:58 +0200
+
+resource-agents (1:3.9.7-2) unstable; urgency=medium
+
+  [ Adrian Vondendriesch ]
+  * debian/ldirectord.cf: Create a dummy configuration file.
+  * debian/ldirectord.install: Ship the dummy configuration as default config
+    for ldirectord. Otherwise the installation fails. (Closes: #817117)
+
+  [ Christoph Berg ]
+  * Remove Martin, Anibal, Simon, and Frederik from Uploaders.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Mon, 14 Mar 2016 11:35:07 +0100
+
 resource-agents (1:3.9.7-1~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
