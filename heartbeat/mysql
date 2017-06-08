@@ -13,7 +13,7 @@
 #           Marian Marinov, Florian Haas: add replication capability
 #           Yves Trudeau, Baron Schwartz: add VIP support and improve replication
 #
-# Support:  linux-ha@lists.linux-ha.org
+# Support:  users@clusterlabs.org
 # License:  GNU General Public License (GPL)
 #
 # (c) 2002-2005 International Business Machines, Inc.
@@ -549,6 +549,7 @@ set_master() {
 
     ocf_run $MYSQL $MYSQL_OPTIONS_REPL \
         -e "CHANGE MASTER TO MASTER_HOST='$new_master', \
+        MASTER_PORT=$OCF_RESKEY_replication_port, \
         MASTER_USER='$OCF_RESKEY_replication_user', \
         MASTER_PASSWORD='$OCF_RESKEY_replication_passwd' $master_params"
     rm -f $tmpfile

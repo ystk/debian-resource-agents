@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Support:      linux-ha@lists.linux-ha.org
+# Support:      users@clusterlabs.org
 # License:      GNU General Public License (GPL)
 # 
 # Filesystem
@@ -395,6 +395,12 @@ fstype_supported()
 #
 Filesystem_start()
 {
+	# Check if there are any mounts mounted under the mountpoint
+	if list_mounts | grep -q -E " $MOUNTPOINT/\w+" >/dev/null 2>&1; then
+		ocf_log err "There is one or more mounts mounted under $MOUNTPOINT."
+		return $OCF_ERR_CONFIGURED
+	fi
+
 	# See if the device is already mounted.
 	if Filesystem_status >/dev/null 2>&1 ; then
 		ocf_log info "Filesystem $MOUNTPOINT is already mounted."
@@ -448,7 +454,7 @@ Filesystem_start()
 	esac
 
 	if [ $? -ne 0 ]; then
-		ocf_exit_reason "Couldn't mount filesystem $DEVICE on $MOUNTPOINT"
+		ocf_exit_reason "Couldn't mount device [$DEVICE] as $MOUNTPOINT"
 		return $OCF_ERR_GENERIC
 	fi
 	return $OCF_SUCCESS
@@ -680,7 +686,7 @@ Filesystem_monitor()
 #
 Filesystem_validate_all()
 {
-	if [ -n $MOUNTPOINT -a ! -d $MOUNTPOINT ]; then
+	if [ -n "$MOUNTPOINT" ] && [ ! -d "$MOUNTPOINT" ]; then
 		ocf_log warn "Mountpoint $MOUNTPOINT does not exist"
 	fi
 

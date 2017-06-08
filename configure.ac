@@ -187,7 +187,7 @@ AC_ARG_WITH(initdir,
     [  --with-initdir=DIR      directory for init (rc) scripts [${INITDIR}]],
     [ INITDIR="$withval" ])
 
-OCF_ROOT_DIR="/usr/lib/ocf"
+OCF_ROOT_DIR="${prefix}/lib/ocf"
 AC_ARG_WITH(ocf-root,
     [  --with-ocf-root=DIR      directory for OCF scripts [${OCF_ROOT_DIR}]],
     [ OCF_ROOT_DIR="$withval" ])
@@ -901,7 +901,7 @@ dnl *****************
 AC_MSG_RESULT([])
 AC_MSG_RESULT([$PACKAGE configuration:])
 AC_MSG_RESULT([  Version                  = ${VERSION}])
-AC_MSG_RESULT([  Build Version            = e697f43c4e59a47bd0dc7c093b7d46174035c2dd])
+AC_MSG_RESULT([  Build Version            = 18222e08b4a70df8ae561b3460dcdf8bce0f6c63])
 AC_MSG_RESULT([  Features                 =${PKG_FEATURES}])
 AC_MSG_RESULT([])
 AC_MSG_RESULT([  Prefix                   = ${prefix}])
